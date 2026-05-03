@@ -9,8 +9,8 @@ Read these in order. Each one assumes the previous.
 1. [Domain](./domain.md) — what your app is fundamentally about
 2. [Repository](./repository.md) — the one place that knows how to load and save domain entities
 3. [Service](./service.md) — the function that runs one use case from start to finish
-4. Adapter — *coming next* — the generalization of Repository (a swappable seam for *any* external system, not just storage)
-5. Unit of Work — *coming next* — ties Services and Repositories together at transaction boundaries (one logical operation = one commit/rollback)
+4. [Adapter](./adapter.md) — the generalization of Repository (a swappable seam for *any* external system, not just storage)
+5. [Unit of Work](./unit-of-work.md) — ties Services and Repositories together at transaction boundaries (one logical operation = one commit/rollback)
 
 ### Why this order
 
