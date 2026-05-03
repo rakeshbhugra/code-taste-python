@@ -5,7 +5,7 @@ A working glossary of the terms from "Architecture Patterns with Python" (Cosmic
 ## Reading order
 
 1. [Domain](./domain.md) — what your app is fundamentally about
-2. Repository — *coming next*
+2. [Repository](./repository.md) — the one place that knows how to load and save domain entities
 3. Service — *coming next*
 4. Adapter — *coming next*
 5. Unit of Work — *coming next*
