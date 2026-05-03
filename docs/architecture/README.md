@@ -4,68 +4,43 @@ A working glossary of the terms from "Architecture Patterns with Python" (Cosmic
 
 ## Quick-reference diagram
 
-The whole picture in one shot. This is the cosmic-python Part I figure, augmented with what we covered (multiple adapters, ports vs. adapters split).
+The whole picture in one shot.
 
 ### Runtime flow — what calls what
 
-```
-┌─────────────────────────────────────────────────┐
-│                  ENTRYPOINTS                    │
-│             FastAPI / CLI / Worker              │
-└────────────────────────┬────────────────────────┘
-                         │ invokes
-                         ▼
-┌─────────────────────────────────────────────────┐
-│                 SERVICE LAYER                   │
-│                                                 │
-│   ┌─────────────┐  starts   ┌──────────────┐    │
-│   │  Services   │──────────▶│ Unit of Work │    │
-│   └──────┬──────┘           └──────┬───────┘    │
-│          │                         │            │
-└──────────┼─────────────────────────┼────────────┘
-           │ calls methods on        │ provides
-           ▼                         ▼
-┌──────────────────┐         ┌──────────────────┐
-│      DOMAIN      │  loads  │     ADAPTERS     │
-│                  │ ◀─────  │                  │
-│  Entities        │  saves  │  Repository      │
-│  + rules         │         │  Summarizer      │
-│  + value objects │         │  Notifier        │
-│                  │         │  AuthProvider    │
-└──────────────────┘         └────────┬─────────┘
-                                      │ commits / calls
-                                      ▼
-                             ┌──────────────────┐
-                             │ EXTERNAL SYSTEMS │
-                             │   DB · litellm   │
-                             │  Clerk · Resend  │
-                             └──────────────────┘
-```
+![Runtime flow: Flask invokes services, services start a Unit of Work and call methods on the Domain, the UoW provides Adapters (Repository) which load and save Domain entities and commit changes to the DB](./images/runtime-flow.png)
 
-**How to read it:** A request comes in at the top, drops into a service, the service starts a Unit of Work and calls methods on the Domain. The UoW provides repositories (and other adapters) that load/save Domain entities. Adapters then talk to external systems. Nothing below ever imports anything above it.
+*Figure from *Architecture Patterns with Python* by Harry Percival & Bob Gregory (O'Reilly).*
+
+**How to read it:** a request comes in at the top, drops into a service, the service starts a Unit of Work and calls methods on the Domain. The UoW provides repositories (and other adapters) that load/save Domain entities. Adapters talk to external systems. Nothing below ever imports anything above it.
+
+**Two mental upgrades to apply as you read it:**
+
+1. The "Adapters" box only shows `Repository` because the book's example only needs storage. Your apps have more — `Summarizer`, `Notifier`, `AuthProvider`, `PaymentAdapter`. Same shape, repeated per external system.
+2. The book lumps Port + Adapter into one box. They're actually two things — see the next diagram.
 
 ### Each "Adapter" box, expanded
 
 The diagram lumps Port + Adapter into one box. They're actually two things:
 
-```
-┌─────── Ports (abstract, near domain) ────────┐
-│                                              │
-│   class Summarizer(ABC):                     │
-│       def summarize(req): ...                │
-│                                              │
-└──────────────────▲───────────────────────────┘
-                   │ implements
-                   │
-┌─────── Adapters (concrete impls) ────────────┐
-│                                              │
-│   class LiteLLMSummarizer(Summarizer)        │
-│   class FakeSummarizer(Summarizer)  # tests  │
-│                                              │
-└──────────────────────────────────────────────┘
+```mermaid
+classDiagram
+    class Summarizer {
+        <<abstract / port>>
+        +summarize(request) Summary
+    }
+    class LiteLLMSummarizer {
+        +summarize(request) Summary
+    }
+    class FakeSummarizer {
+        <<for tests>>
+        +summarize(request) Summary
+    }
+    LiteLLMSummarizer --|> Summarizer
+    FakeSummarizer --|> Summarizer
 ```
 
-The same shape applies to every external system: Repository, AuthProvider, Notifier, PaymentAdapter. Port is the *shape of the hole*; adapter is the *plug* that fits it.
+The same shape applies to every external system: Repository, AuthProvider, Notifier, PaymentAdapter. **Port is the *shape of the hole*; adapter is the *plug* that fits it.**
 
 ### The dependency rule (the only thing you must get right)
 
