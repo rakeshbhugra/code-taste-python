@@ -2,6 +2,84 @@
 
 A working glossary of the terms from "Architecture Patterns with Python" (Cosmic Python) and DDD, in plain English. Taught in dependency order — each concept builds on the previous.
 
+## Quick-reference diagram
+
+The whole picture in one shot. This is the cosmic-python Part I figure, augmented with what we covered (multiple adapters, ports vs. adapters split).
+
+### Runtime flow — what calls what
+
+```
+┌─────────────────────────────────────────────────┐
+│                  ENTRYPOINTS                    │
+│             FastAPI / CLI / Worker              │
+└────────────────────────┬────────────────────────┘
+                         │ invokes
+                         ▼
+┌─────────────────────────────────────────────────┐
+│                 SERVICE LAYER                   │
+│                                                 │
+│   ┌─────────────┐  starts   ┌──────────────┐    │
+│   │  Services   │──────────▶│ Unit of Work │    │
+│   └──────┬──────┘           └──────┬───────┘    │
+│          │                         │            │
+└──────────┼─────────────────────────┼────────────┘
+           │ calls methods on        │ provides
+           ▼                         ▼
+┌──────────────────┐         ┌──────────────────┐
+│      DOMAIN      │  loads  │     ADAPTERS     │
+│                  │ ◀─────  │                  │
+│  Entities        │  saves  │  Repository      │
+│  + rules         │         │  Summarizer      │
+│  + value objects │         │  Notifier        │
+│                  │         │  AuthProvider    │
+└──────────────────┘         └────────┬─────────┘
+                                      │ commits / calls
+                                      ▼
+                             ┌──────────────────┐
+                             │ EXTERNAL SYSTEMS │
+                             │   DB · litellm   │
+                             │  Clerk · Resend  │
+                             └──────────────────┘
+```
+
+**How to read it:** A request comes in at the top, drops into a service, the service starts a Unit of Work and calls methods on the Domain. The UoW provides repositories (and other adapters) that load/save Domain entities. Adapters then talk to external systems. Nothing below ever imports anything above it.
+
+### Each "Adapter" box, expanded
+
+The diagram lumps Port + Adapter into one box. They're actually two things:
+
+```
+┌─────── Ports (abstract, near domain) ────────┐
+│                                              │
+│   class Summarizer(ABC):                     │
+│       def summarize(req): ...                │
+│                                              │
+└──────────────────▲───────────────────────────┘
+                   │ implements
+                   │
+┌─────── Adapters (concrete impls) ────────────┐
+│                                              │
+│   class LiteLLMSummarizer(Summarizer)        │
+│   class FakeSummarizer(Summarizer)  # tests  │
+│                                              │
+└──────────────────────────────────────────────┘
+```
+
+The same shape applies to every external system: Repository, AuthProvider, Notifier, PaymentAdapter. Port is the *shape of the hole*; adapter is the *plug* that fits it.
+
+### The dependency rule (the only thing you must get right)
+
+```
+domain      ←  imports nothing external
+ports       ←  imports domain only
+adapters    ←  imports domain, ports, external SDKs
+services    ←  imports domain, ports
+entrypoints ←  imports services, schemas
+bootstrap   ←  imports everything (the wiring)
+```
+
+Arrows always point **inward toward the domain**. If `domain/lists.py` ever imports from `adapters/` or `entrypoints/`, the architecture is broken. A `grep` in CI is enough to enforce this.
+
 ## Reading order — the core five
 
 Read these in order. Each one assumes the previous.
@@ -11,6 +89,12 @@ Read these in order. Each one assumes the previous.
 3. [Service](./service.md) — the function that runs one use case from start to finish
 4. [Adapter](./adapter.md) — the generalization of Repository (a swappable seam for *any* external system, not just storage)
 5. [Unit of Work](./unit-of-work.md) — ties Services and Repositories together at transaction boundaries (one logical operation = one commit/rollback)
+
+### Putting it on disk
+
+- [Project Structure](./project-structure.md) — what the directory layout looks like once you apply the core five (FastAPI/Python, anchored to hypedar/tytona)
+- [Testing](./testing.md) — the test pyramid, doubles vs mocks, pytest mechanics, and why the architecture above makes good tests cheap
+- [Performance & Benchmarking](./performance.md) — five questions, five tools (profiler / tracer / load test / monitor / query analysis), load shapes, the four prod failure modes, what NOT to do
 
 ### Why this order
 
