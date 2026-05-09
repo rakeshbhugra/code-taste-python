@@ -1,0 +1,21 @@
+{
+  "name": "code-taste",
+  "owner": {
+    "name": "Rakesh Bhugra"
+  },
+  "metadata": {
+    "description": "Layered-architecture playbook for Python backends (Domain/Repository/Service/Adapter/UoW), packaged as a Claude Code skill.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "code-taste",
+      "description": "Review and structure Python backend code against a layered-architecture playbook.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./"
+      ]
+    }
+  ]
+}
