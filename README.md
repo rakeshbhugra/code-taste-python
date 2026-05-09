@@ -34,7 +34,7 @@ Read the docs directly, or install the skill so Claude uses them on your behalf.
 ### Option 1 — Manual git clone
 
 ```bash
-git clone https://github.com/rakeshbhugra/code_taste.git ~/.claude/skills/code-taste-python
+git clone https://github.com/rakeshbhugra/code-taste-python.git ~/.claude/skills/code-taste-python
 ```
 
 Claude Code auto-discovers skills in `~/.claude/skills/`. The SKILL.md references `./docs/architecture/` relatively, so no further setup is needed.
@@ -46,7 +46,7 @@ Update with `git pull` in that directory; uninstall by removing it.
 Inside Claude Code:
 
 ```
-/plugin marketplace add rakeshbhugra/code_taste
+/plugin marketplace add rakeshbhugra/code-taste-python
 /plugin install code-taste-python@code-taste-python
 ```
 
@@ -65,5 +65,5 @@ If the skill loaded, Claude will pull the relevant doc(s) from `docs/architectur
 Just clone anywhere and read `docs/architecture/README.md` first — it's the entry point and explains the dependency rule and vocabulary used by the rest.
 
 ```bash
-git clone https://github.com/rakeshbhugra/code_taste.git
+git clone https://github.com/rakeshbhugra/code-taste-python.git
 ```
