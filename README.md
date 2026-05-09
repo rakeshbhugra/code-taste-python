@@ -32,6 +32,8 @@ Read the docs directly, or install the skill so Claude uses them on your behalf.
 
 ## Install as a Claude Code skill
 
+### Option 1 — Plugin marketplace (recommended)
+
 Inside Claude Code:
 
 ```
@@ -41,6 +43,19 @@ Inside Claude Code:
 ```
 
 Updates ship via `/plugin marketplace update code-taste-python` followed by `/reload-plugins`.
+
+Tested on Claude Code 2.1.138.
+
+### Option 2 — Manual git clone
+
+Clone the repo anywhere, then symlink the skill directory into Claude Code's skills folder:
+
+```bash
+git clone https://github.com/rakeshbhugra/code-taste-python.git
+ln -s "$(pwd)/code-taste-python/skills/code-taste-python" ~/.claude/skills/code-taste-python
+```
+
+Claude Code auto-discovers skills in `~/.claude/skills/`. Update with `git pull` in the cloned dir; uninstall by removing the symlink (and the clone if you want).
 
 ### Verify
 
