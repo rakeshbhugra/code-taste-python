@@ -69,7 +69,9 @@ Read these in order. Each one assumes the previous.
 
 - [Project Structure](./project-structure.md) — what the directory layout looks like once you apply the core five (FastAPI/Python, anchored to hypedar/tytona)
 - [Testing](./testing.md) — the test pyramid, doubles vs mocks, pytest mechanics, and why the architecture above makes good tests cheap
-- [Performance & Benchmarking](./performance.md) — five questions, five tools (profiler / tracer / load test / monitor / query analysis), load shapes, the four prod failure modes, what NOT to do
+- [Performance & Benchmarking](./performance.md) — *external tooling*: five questions, five tools (profiler / tracer / load test / monitor / query analysis), load shapes, the four prod failure modes
+- [Code-Level Instrumentation](./instrumentation.md) — *what to wire into your code*: custom spans, health checks, metrics, pytest-benchmark, latency budgets — companion to performance.md
+- [Logging & Observability](./logging.md) — structured logging with structlog, correlation IDs, ASGI middleware (not HTTP), what to log / never log, the FastAPI 2026 stack
 
 ### Why this order
 
