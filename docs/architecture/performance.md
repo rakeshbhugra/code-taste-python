@@ -5,6 +5,8 @@
 
 Performance work is its own discipline — bigger than testing, more contested. This doc is the orientation, not a deep dive. The actual practice you'll build by responding to real signals from real systems.
 
+> **Companion doc:** this page covers the *external* tooling — profilers, tracers, load testers, monitors. For what to wire *into* your code (custom spans, health checks, metrics, pytest-benchmark), see [instrumentation.md](./instrumentation.md).
+
 ## The goal (the only one)
 
 > **Know whether your system is fast enough to keep users happy, and have the tools to find out why when it isn't.**
