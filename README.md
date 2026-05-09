@@ -1,4 +1,4 @@
-# code_taste
+# code-taste-python
 
 A layered-architecture playbook for Python backends — Domain / Repository / Service / Adapter / Unit-of-Work — distilled from *Architecture Patterns with Python* (Cosmic Python) and DDD into plain-English working notes.
 
@@ -34,7 +34,7 @@ Read the docs directly, or install the skill so Claude uses them on your behalf.
 ### Option 1 — Manual git clone
 
 ```bash
-git clone https://github.com/rakeshbhugra/code_taste.git ~/.claude/skills/code-taste
+git clone https://github.com/rakeshbhugra/code_taste.git ~/.claude/skills/code-taste-python
 ```
 
 Claude Code auto-discovers skills in `~/.claude/skills/`. The SKILL.md references `./docs/architecture/` relatively, so no further setup is needed.
@@ -47,7 +47,7 @@ Inside Claude Code:
 
 ```
 /plugin marketplace add rakeshbhugra/code_taste
-/plugin install code-taste@code-taste
+/plugin install code-taste-python@code-taste-python
 ```
 
 Updates ship via `/plugin update`.

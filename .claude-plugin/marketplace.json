@@ -1,5 +1,5 @@
 {
-  "name": "code-taste",
+  "name": "code-taste-python",
   "owner": {
     "name": "Rakesh Bhugra"
   },
@@ -9,7 +9,7 @@
   },
   "plugins": [
     {
-      "name": "code-taste",
+      "name": "code-taste-python",
       "description": "Review and structure Python backend code against a layered-architecture playbook.",
       "source": "./",
       "strict": false,

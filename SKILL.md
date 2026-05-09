@@ -1,9 +1,9 @@
 ---
-name: code-taste
+name: code-taste-python
 description: Review and structure Python backend code against the layered-architecture playbook in ./docs/architecture/. Use when asked to review architecture, structure a new feature, check whether code follows the patterns (Domain/Repository/Service/Adapter/UoW), or audit what's missing in code quality / tooling / tests / observability.
 ---
 
-# Code Taste
+# Code Taste (Python)
 
 Code-structure review and guidance, grounded in the architecture playbook at `./docs/architecture/` (sibling to this file).
 
